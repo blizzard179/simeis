@@ -1,5 +1,5 @@
 PORT=8080
-URL=f"http://0.0.0.0:{PORT}"
+URL=f"http://212.147.229.70:{PORT}"
 
 import sys
 import os
