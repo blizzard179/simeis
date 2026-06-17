@@ -1,0 +1,134 @@
+[
+  {
+    "name": "main-branch-protection",
+    "description": "Protects main. Only feature/* branches may be merged here via pull request.",
+    "target": "branch",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "include": ["refs/heads/main"],
+        "exclude": []
+      }
+    },
+    "rules": [
+      { "type": "deletion" },
+      { "type": "non_fast_forward" },
+      { "type": "required_linear_history" },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 1,
+          "dismiss_stale_reviews_on_push": true,
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": true
+        }
+      }
+    ],
+    "bypass_actors": [],
+    "source_branch_policy": {
+      "allowed_patterns": ["feature/*", "bugfix/*"],
+      "note": "Enforce via CI: reject PRs whose source branch does not match feature/* or bugfix/*"
+    }
+  },
+  {
+    "name": "release-branch-protection",
+    "description": "Protects release/* branches. Must be created from main. Only bugfix/* branches may be merged here via pull request.",
+    "target": "branch",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "include": ["refs/heads/release/*"],
+        "exclude": []
+      }
+    },
+    "rules": [
+      { "type": "deletion" },
+      { "type": "non_fast_forward" },
+      {
+        "type": "branch_name_pattern",
+        "parameters": {
+          "name": "Release branch version format",
+          "negate": false,
+          "operator": "regex",
+          "pattern": "^release/\\d+\\.\\d+(\\.\\d+)?$"
+        }
+      },
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 1,
+          "dismiss_stale_reviews_on_push": true,
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": true
+        }
+      }
+    ],
+    "bypass_actors": [],
+    "creation_policy": {
+      "allowed_source": "main",
+      "note": "Enforce via CI: release/* branches must be created from main"
+    },
+    "source_branch_policy": {
+      "allowed_patterns": ["bugfix/*"],
+      "note": "Enforce via CI: reject PRs whose source branch does not match bugfix/*"
+    }
+  },
+  {
+    "name": "feature-branch-naming",
+    "description": "Enforces naming convention for feature branches. These branches may only target main.",
+    "target": "branch",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "include": ["refs/heads/feature/**"],
+        "exclude": []
+      }
+    },
+    "rules": [
+      {
+        "type": "branch_name_pattern",
+        "parameters": {
+          "name": "Feature branch naming convention",
+          "negate": false,
+          "operator": "regex",
+          "pattern": "^feature/.+"
+        }
+      }
+    ],
+    "bypass_actors": [],
+    "merge_target_policy": {
+      "allowed_targets": ["main"],
+      "note": "Enforce via CI: feature/* branches must only open PRs targeting main"
+    }
+  },
+  {
+    "name": "bugfix-branch-naming",
+    "description": "Enforces naming convention for bugfix branches. These branches may only target release/*.",
+    "target": "branch",
+    "enforcement": "active",
+    "conditions": {
+      "ref_name": {
+        "include": ["refs/heads/bugfix/**"],
+        "exclude": []
+      }
+    },
+    "rules": [
+      {
+        "type": "branch_name_pattern",
+        "parameters": {
+          "name": "Bugfix branch naming convention",
+          "negate": false,
+          "operator": "regex",
+          "pattern": "^bugfix/.+"
+        }
+      }
+    ],
+    "bypass_actors": [],
+    "merge_target_policy": {
+      "allowed_targets": ["release/*"],
+      "note": "Enforce via CI: bugfix/* branches must only open PRs targeting release/*"
+    }
+  }
+]

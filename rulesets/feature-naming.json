@@ -1,0 +1,24 @@
+{
+  "name": "feature-branch-naming",
+  "target": "branch",
+  "source_type": "Repository",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "exclude": [],
+      "include": ["refs/heads/feature/**"]
+    }
+  },
+  "rules": [
+    {
+      "type": "branch_name_pattern",
+      "parameters": {
+        "name": "Feature branch naming convention",
+        "negate": false,
+        "operator": "regex",
+        "pattern": "^feature/.+"
+      }
+    }
+  ],
+  "bypass_actors": []
+}
