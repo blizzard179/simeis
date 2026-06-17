@@ -1,4 +1,4 @@
-name: Rust CI
+name: Quality CI
 
 on:
   push:
@@ -33,3 +33,15 @@ jobs:
 
       - name: Vérification Clippy
         run: cargo clippy --all-targets --features compio -- -D warnings
+
+       # Python
+      - name: Installation Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer Black
+        run: pip install black
+
+      - name: Vérifier le formatage Python
+        run: black --check tests/
