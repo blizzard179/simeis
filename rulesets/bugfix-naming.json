@@ -1,0 +1,24 @@
+{
+  "name": "bugfix-branch-naming",
+  "target": "branch",
+  "source_type": "Repository",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "exclude": [],
+      "include": ["refs/heads/bugfix/**"]
+    }
+  },
+  "rules": [
+    {
+      "type": "branch_name_pattern",
+      "parameters": {
+        "name": "Bugfix branch naming convention",
+        "negate": false,
+        "operator": "regex",
+        "pattern": "^bugfix/.+"
+      }
+    }
+  ],
+  "bypass_actors": []
+}
