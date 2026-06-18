@@ -1,4 +1,4 @@
-name : quality-ci
+name : quality-ci.yml
 
 on: [push, pull_request]
 
