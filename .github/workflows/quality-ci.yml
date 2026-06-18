@@ -1,0 +1,11 @@
+name : quality-ci
+
+on: [push, pull_request]
+
+jobs:
+    check :
+
+        name: check
+        runs-on: ubuntu-latest
+        steps : 
+            - run : echo hello world ! 
