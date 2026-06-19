@@ -1,0 +1,25 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  docker:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t simeis-server:${{ github.ref_name }} -f .github/Dockerfile .
+
+      - name: Save Docker image
+        run: docker image save simeis-server:${{ github.ref_name }} -o simeis-server.tar
+
+      - name: Upload image archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: simeis-server-docker
+          path: simeis-server.tar
