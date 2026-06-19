@@ -2,7 +2,7 @@ BIN_NAME=simeis-server
 MANUAL=doc/manual.typ
 MANUAL_OUT=doc/manual.pdf
 
-.PHONY: all release strip manual check test clean dev
+.PHONY: all release strip manual check test tarpaulin clean dev
 
 ifeq ($(OS),Windows_NT)
 RELEASE_CMD=set "RUSTFLAGS=-C code-model=kernel -C codegen-units=1" && cargo build --release -p simeis-server
@@ -32,6 +32,9 @@ check:
 
 test:
 	cargo test --workspace
+
+tarpaulin:
+	cargo tarpaulin --workspace --out xml
 
 clean:
 	cargo clean
