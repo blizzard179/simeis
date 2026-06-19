@@ -39,8 +39,9 @@ jobs:
       - name: Build Debian package
         env:
           DEB_BUILD_OPTIONS: nocheck
-          PATH: ${{ env.PATH }}:/home/runner/.cargo/bin
-        run: dpkg-buildpackage -us -uc -b -d
+        run: |
+          export PATH="$PATH:/home/runner/.cargo/bin"
+          dpkg-buildpackage -us -uc -b -d
 
       - name: Locate Debian package
         id: deb
